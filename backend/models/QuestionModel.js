@@ -1,16 +1,18 @@
 const mongoose = require('mongoose')
 
 module.exports = function() {
+    
     const schema = mongoose.Schema({
-        group: {
+        question: {
             type: String,
             required: true
         },
-        description: {
-            type: String,
+        group_id: {
+            type: mongoose.ObjectId,
+            ref: 'QuestionGroup',
             required: true
         }
     })
 
-    return mongoose.model('QuestionGroup', schema, 'question_groups')
+    return mongoose.model('Question', schema, 'questions')
 }
