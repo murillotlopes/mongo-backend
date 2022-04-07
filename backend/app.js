@@ -15,7 +15,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const glossary = require('./routes/glossaryRoutes')
+const user = require('./routes/userRoutes')
+const assessment = require('./routes/assessmentRoutes')
 
 app.use('/glossary', glossary)
+app.use('/user', user)
+app.use('/assessment', assessment)
 
 module.exports = app;
