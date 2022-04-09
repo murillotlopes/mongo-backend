@@ -17,9 +17,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 const glossary = require('./routes/glossaryRoutes')
 const user = require('./routes/userRoutes')
 const assessment = require('./routes/assessmentRoutes')
+const questionGroup = require('./routes/questionGroupRoutes')
+const question = require('./routes/questionRoutes')
+const answer = require('./routes/answerRoutes')
 
 app.use('/glossary', glossary)
 app.use('/user', user)
 app.use('/assessment', assessment)
+app.use('/question-group', questionGroup)
+app.use('/question', question)
+app.use('/answer', answer)
+
 
 module.exports = app;
