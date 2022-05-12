@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
             auth: false, 
             message: 'Failed to authenticate token'})
 
-        req.userId = decoded.userId
+        req.authenticatedId = decoded.userId
 
         next()
     })

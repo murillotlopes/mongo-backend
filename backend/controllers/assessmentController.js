@@ -17,7 +17,7 @@ controller.create = async (req, res) => {
 
 controller.retrieve = async (req, res) => {
     try{
-        const result = await Assessment.find().populate('user')
+        const result = await Assessment.find({user: req.authenticateId}).populate('user').select('-user.password_hash')
 
         res.send(result)
     }catch(error) {
@@ -30,7 +30,7 @@ controller.retrieve = async (req, res) => {
 controller.retrieveOne = async (req, res) => {
     try{
         const id = req.params.id
-        const result = await Assessment.findById(id)
+        const result = await Assessment.findOne({_id: id, user: req.authenticateId})
 
         if(result) res.send(result)
 

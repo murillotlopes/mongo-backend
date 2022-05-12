@@ -6,6 +6,15 @@ const controller = {}
 
 controller.create = async (req, res) => {
     try{
+
+        if(!req.body.password) return res.status(500).send({
+            error: 'Path "password" is required'
+        })
+
+        req.body.password_hash = await bcrypt.hash(req.body.password,12)
+
+        delete req.body.password
+
         await User.create(req.body)
 
         res.status(201).end()
@@ -19,9 +28,16 @@ controller.create = async (req, res) => {
 
 controller.retrieve = async (req, res) => {
     try{
-        const result = await User.find()
+        let result
+        
+        if (req.authenticatedId === 'Id do usuário admin')
+            result = await User.find()
+        else
+            result = await User.find({_id: req.authenticatedId})
 
+        // const result = await User.find()
         res.send(result)
+
     }catch(error) {
         console.log(error)
 
@@ -31,8 +47,15 @@ controller.retrieve = async (req, res) => {
 
 controller.retrieveOne = async (req, res) => {
     try{
+        let result
         const id = req.params.id
-        const result = await User.findById(id)
+
+        if (req.authenticatedId === 'Id do usuário admin' || req.authenticatedId === id)
+            result = await User.find(id)
+
+        else
+            result = null
+
 
         if(result) res.send(result)
 
@@ -47,6 +70,13 @@ controller.retrieveOne = async (req, res) => {
 
 controller.update = async (req, res) => {
     try{
+
+        if(req.body.password) {
+
+            req.body.password_hash = await bcrypt.hash(req.body.password,12)
+            delete req.body.password
+        }
+
         const id = req.body._id
         const result = await User.findByIdAndUpdate(id, req.body)
 
@@ -80,15 +110,15 @@ controller.delete = async (req, res) => {
 controller.login = async(req, res) => {
 
     try{
-        const user = await User.findOne({email: req.body.email})
-
+        const user = await User.findOne({email: req.body.email}).select('password_hash')
+        console.log(user)
         if(!user) {
             res.status(401).end()
 
         } else {
             bcrypt.compare(req.body.password, user.password_hash, function(err, result){
 
-                console.log(result)
+                //console.log(result)
                 
                 if(result){
 
@@ -112,6 +142,14 @@ controller.login = async(req, res) => {
         console.log(error)
         res.status(500).send(error)
     }
+}
+
+controller.logout = async(req, res) => {
+    
+    res.send({
+        auth: false,
+        token: null
+    })
 }
 
 module.exports = controller

@@ -18,7 +18,8 @@ module.exports = function() {
         },
         password_hash: {
             type: String,
-            required: true
+            required: true,
+            select: false
         },
         date_registered: {
             type: Date,
