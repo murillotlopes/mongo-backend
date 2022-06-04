@@ -3,12 +3,12 @@ const Question = require('../models/QuestionModel')()
 const controller = {}
 
 controller.create = async (req, res) => {
-    try{
+    try {
         await Question.create(req.body)
 
         res.status(201).end()
 
-    }catch(error) {
+    } catch (error) {
         console.log(error)
 
         res.status(500).send(error)
@@ -16,11 +16,11 @@ controller.create = async (req, res) => {
 }
 
 controller.retrieve = async (req, res) => {
-    try{
+    try {
         const result = await Question.find().populate('group')
 
         res.send(result)
-    }catch(error) {
+    } catch (error) {
         console.log(error)
 
         res.status(500).send(error)
@@ -28,31 +28,51 @@ controller.retrieve = async (req, res) => {
 }
 
 controller.retrieveOne = async (req, res) => {
-    try{
+    try {
         const id = req.params.id
         const result = await Question.findById(id)
 
-        if(result) res.send(result)
+        if (result) res.send(result)
 
         else res.status(404).end()
 
-    }catch(error) {
+    } catch (error) {
         console.log(error)
 
         res.status(500).send(error)
     }
 }
 
-controller.update = async (req, res) => {
+controller.retrieveByGroup = async (req, res) => {
+    try {
+        const result = await Question.find({ group: req.params.groupId }).sort('number')
+
+        res.send(result)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+controller.retrieveByGroupAndNumber = async (req, res) => {
     try{
+        const result = await Question.findOne({group: req.params.groupId, number: req.params.number})
+
+        res.send(result)
+    }catch (error){
+        res.status(500).send(error)
+    }
+}
+
+controller.update = async (req, res) => {
+    try {
         const id = req.body._id
         const result = await Question.findByIdAndUpdate(id, req.body)
 
-        if(result) res.status(204).end()
+        if (result) res.status(204).end()
 
         else res.status(404).end()
 
-    }catch(error) {
+    } catch (error) {
         console.log(error)
 
         res.status(500).send(error)
@@ -60,15 +80,15 @@ controller.update = async (req, res) => {
 }
 
 controller.delete = async (req, res) => {
-    try{
+    try {
         const id = req.body._id
         const result = await Question.findByIdAndDelete(id)
 
-        if(result) res.status(204).end()
+        if (result) res.status(204).end()
 
         else res.status(404).end()
 
-    }catch(error) {
+    } catch (error) {
         console.log(error)
 
         res.status(500).send(error)
