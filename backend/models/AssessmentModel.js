@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-module.exports = function() {
+module.exports = function () {
 
     const schema = mongoose.Schema({
         datetime: {
@@ -16,10 +16,19 @@ module.exports = function() {
             type: String,
             required: false
         },
+        url: {
+            type: String,
+            required: false
+        },
         user: {
             type: mongoose.ObjectId,
             required: true,
             ref: 'User'
+        },
+        closed: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     })
 

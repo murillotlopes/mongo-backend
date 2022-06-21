@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 
-module.exports = function() {
-    
+module.exports = function () {
+
     const schema = mongoose.Schema({
-        
+
         number: {
             type: Number,
             required: true
@@ -17,11 +17,15 @@ module.exports = function() {
             type: mongoose.ObjectId,
             ref: 'QuestionGroup',
             required: true
+        },
+        glossaryItem: {
+            type: [],
+            required: false
         }
     })
 
-    schema.index({group: 1, number: 1}, {unique: true})
-    
+    schema.index({ group: 1, number: 1 }, { unique: true })
+
     return mongoose.model('Question', schema, 'questions')
 
 }

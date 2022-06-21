@@ -3,12 +3,13 @@ const Assessment = require('../models/AssessmentModel')()
 const controller = {}
 
 controller.create = async (req, res) => {
-    try{
-        await Assessment.create(req.body)
+    console.log(req.body)
+    try {
+        const result = await Assessment.create(req.body)
 
-        res.status(201).end()
+        res.status(201).send(result)
 
-    }catch(error) {
+    } catch (error) {
         console.log(error)
 
         res.status(500).send(error)
@@ -16,11 +17,11 @@ controller.create = async (req, res) => {
 }
 
 controller.retrieve = async (req, res) => {
-    try{
-        const result = await Assessment.find({user: req.authenticateId}).populate('user').select('-user.password_hash')
+    try {
+        const result = await Assessment.find({ user: req.authenticatedId }).populate('user')
 
         res.send(result)
-    }catch(error) {
+    } catch (error) {
         console.log(error)
 
         res.status(500).send(error)
@@ -28,15 +29,15 @@ controller.retrieve = async (req, res) => {
 }
 
 controller.retrieveOne = async (req, res) => {
-    try{
+    try {
         const id = req.params.id
-        const result = await Assessment.findOne({_id: id, user: req.authenticateId})
+        const result = await Assessment.findOne({ _id: id, user: req.authenticatedId })
 
-        if(result) res.send(result)
+        if (result) res.send(result)
 
         else res.status(404).end()
 
-    }catch(error) {
+    } catch (error) {
         console.log(error)
 
         res.status(500).send(error)
@@ -44,15 +45,15 @@ controller.retrieveOne = async (req, res) => {
 }
 
 controller.update = async (req, res) => {
-    try{
+    try {
         const id = req.body._id
         const result = await Assessment.findByIdAndUpdate(id, req.body)
 
-        if(result) res.status(204).end()
+        if (result) res.status(204).end()
 
         else res.status(404).end()
 
-    }catch(error) {
+    } catch (error) {
         console.log(error)
 
         res.status(500).send(error)
@@ -60,15 +61,15 @@ controller.update = async (req, res) => {
 }
 
 controller.delete = async (req, res) => {
-    try{
+    try {
         const id = req.body._id
         const result = await Assessment.findByIdAndDelete(id)
 
-        if(result) res.status(204).end()
+        if (result) res.status(204).end()
 
         else res.status(404).end()
 
-    }catch(error) {
+    } catch (error) {
         console.log(error)
 
         res.status(500).send(error)

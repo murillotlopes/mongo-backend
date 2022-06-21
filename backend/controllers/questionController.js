@@ -46,7 +46,6 @@ controller.retrieveOne = async (req, res) => {
 controller.retrieveByGroup = async (req, res) => {
     try {
         const result = await Question.find({ group: req.params.groupId }).sort('number')
-
         res.send(result)
     } catch (error) {
         res.status(500).send(error)
@@ -54,11 +53,11 @@ controller.retrieveByGroup = async (req, res) => {
 }
 
 controller.retrieveByGroupAndNumber = async (req, res) => {
-    try{
-        const result = await Question.findOne({group: req.params.groupId, number: req.params.number})
+    try {
+        const result = await Question.findOne({ group: req.params.groupId, number: req.params.number })
 
         res.send(result)
-    }catch (error){
+    } catch (error) {
         res.status(500).send(error)
     }
 }
